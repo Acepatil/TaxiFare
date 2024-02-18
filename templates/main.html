@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Fare Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* Custom CSS styles can be added here */
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+    }
+
+    .navbar {
+        background-color: #007bff; /* Background color for the navigation bar */
+    }
+
+    .navbar-brand {
+        color: #fff; /* Text color */
+        font-size: 24px; /* Font size of the brand */
+        font-weight: bold; /* Bold font weight */
+        animation: fadeIn 1s ease;
+    }
+
+    .navbar-nav .nav-link {
+        color: #fff; /* Text color for the links */
+        font-size: 18px; /* Font size of the links */
+        transition: color 0.3s ease; /* Smooth transition for color change */
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #ffc107; /* Text color on hover */
+    }
+
+    header {
+        background-color: #09ded7;
+        color: #000000;
+        text-align: center;
+        border-radius: 20px;
+        font-size: 25px;
+        padding: 20px 0;
+        animation: slideInDown 1s ease;
+    }
+
+    .banner {
+        background-color: #6ff38b;
+        color: #fff;
+        border-radius: 20px;
+        text-align: center;
+        padding: 50px 0;
+        animation: slideInUp 1s ease;
+    }
+
+    .banner h2 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+    }
+
+    .banner p {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+    }
+
+    .banner button {
+        background-color: #2868a7;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 1.8em;
+        cursor: pointer;
+        border-radius: 20px;
+        animation: pulse 1s infinite;
+    }
+
+    .banner button:hover {
+        background-color: #227cbc;
+        font-size: 20px;
+        font-style: italic;
+        color: black;
+        animation: rubberBand 0.5s;
+    }
+
+    .calculator {
+        padding: 50px 0;
+        animation: fadeIn 1s ease;
+    }
+
+    .input-group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .input-group input {
+        width: 300px;
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .input-group button {
+        background-color: #37ddec;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+    }
+
+    .input-group button:hover {
+        background-color: #6ce5a3;
+    }
+
+    #result {
+        text-align: center;
+        animation: zoomIn 1s ease;
+    }
+
+    footer {
+        background-color: #000000;
+        color: #fff;
+        text-align: center;
+        padding: 20px 0;
+        animation: slideInUp 1s ease;
+    }
+
+    #map {
+        display: none;
+        height: 300px;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    /* Keyframe animations */
+    @keyframes slideInDown {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(0); }
+    }
+
+    @keyframes slideInUp {
+        0% { transform: translateY(100%); }
+        100% { transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes rubberBand {
+        0% { transform: scale(1); }
+        30% { transform: scale(1.25); }
+        50% { transform: scale(0.75); }
+        70% { transform: scale(1.15); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes zoomIn {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+    }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">TAXIFARE</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{url_for('home')}}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('signin')}}">Sign-in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('signup')}}">Sign-up</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="bg-light text-center py-5" >
+    <h1>Taxi Fare Prediction</h1>
+</header>
+
+<section class="container py-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Estimate Your Taxi Fare</h2>
+                    <p class="card-text">Click the button below to select pickup and drop-off locations on the map.</p>
+                    <button id="openMapBtn" class="btn btn-primary">Open Map</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form id="farePredictionForm" action="/predict" method="post">
+                <div id="map"></div>
+                <div class="form-group">
+                    <label for="pickupInput">Pickup Location</label>
+                    <input type="text" class="form-control" id="pickupInput" name="pickupInput" placeholder="Enter Pickup Location" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="dropoffInput">Drop-off Location</label>
+                    <input type="text" class="form-control" id="dropoffInput" name="dropoffInput" placeholder="Enter Drop-off Location">
+                </div>
+                <div class="form-group">
+                    <label for="pickup_time">Pickup Time</label>
+                    <input type="time" class="form-control" id="pickup_time" name="pickup_time">
+                </div>
+                <div class="form-group">
+                    <label for="pickup_date">Pickup Date</label>
+                    <input type="date" class="form-control" id="pickup_date" name="pickup_date">
+                </div>
+                <div class="form-group">
+                    <label for="passenger_count">Passenger Count</label>
+                    <input type="number" class="form-control" id="passenger_count" name="passenger_count" placeholder="Enter Passenger Count">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="autoPickup">
+                    <label class="form-check-label" for="autoPickup">Automatically fetch current location for pickup</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Predict Fare</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-dark text-white text-center py-3" >
+    <div class="container">
+        <p>&copy; 2024 Taxi Fare Prediction</p>
+    </div>
+</footer>
+
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // JavaScript code
+    var map = L.map('map').setView([0, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var pickupMarker;
+    var dropoffMarker;
+    var autoPickupCheckbox = document.getElementById('autoPickup');
+
+    document.getElementById('openMapBtn').addEventListener('click', function() {
+        document.getElementById('map').style.display = 'block';
+        map.invalidateSize();
+    });
+
+    map.on('click', function(e) {
+        if (!pickupMarker && !autoPickupCheckbox.checked) {
+            pickupMarker = L.marker(e.latlng).addTo(map);
+            document.getElementById('pickupInput').value = e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6);
+        } else if (!dropoffMarker && !autoPickupCheckbox.checked) {
+            dropoffMarker = L.marker(e.latlng).addTo(map);
+            document.getElementById('dropoffInput').value = e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6);
+        } else if (!dropoffMarker && autoPickupCheckbox.checked) {
+            dropoffMarker = L.marker(e.latlng).addTo(map);
+            document.getElementById('dropoffInput').value = e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6);
+        } else {
+            alert('You can only select pickup and drop-off locations.');
+        }
+    });
+
+    document.getElementById('calculateBtn').addEventListener('click', function() {
+        var pickupLocation = document.getElementById('pickupInput').value;
+        var dropoffLocation = document.getElementById('dropoffInput').value;
+        
+        // Perform calculation here and display result
+        var fare = calculateFare(pickupLocation, dropoffLocation);
+
+        document.getElementById('result').innerHTML = `<p>Estimated Fare: $${fare}</p>`;
+    });
+
+    function calculateFare(pickup, dropoff) {
+        // Dummy calculation for demonstration
+        return Math.floor(Math.random() * 50) + 20;
+    }
+
+    document.getElementById('autoPickup').addEventListener('change', function() {
+        if (this.checked) {
+            // Fetch current location for pickup
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    var currentLocation = latitude.toFixed(6) + ', ' + longitude.toFixed(6);
+                    document.getElementById('pickupInput').value = currentLocation;
+                    // Disable the map click event once auto pickup is selected
+                    // map.off('click');
+                });
+            }
+        } else {
+            document.getElementById('pickupInput').value = '';
+            // Re-enable the map click event if auto pickup is unchecked
+            map.on('click', function(e) {
+                if (!pickupMarker && !autoPickupCheckbox.checked) {
+                    pickupMarker = L.marker(e.latlng).addTo(map);
+                    document.getElementById('pickupInput').value = e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6);
+                } else if (!dropoffMarker && !autoPickupCheckbox.checked) {
+                    dropoffMarker = L.marker(e.latlng).addTo(map);
+                    document.getElementById('dropoffInput').value = e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6);
+                } else {
+                    alert('You can only select pickup and drop-off locations.');
+                }
+            });
+        }
+    });
+</script>
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
