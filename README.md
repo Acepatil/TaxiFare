@@ -5,6 +5,8 @@ Navigating through new areas can expose us to the risk of encountering unscrupul
 
 Experience the difference today and embark on your travels with peace of mind, supported by our cutting-edge fare estimation system. Your journey begins here, where transparency meets convenience, and trust is paramount.
 
+![Screenshot 2024-02-18 085230](https://github.com/Acepatil/TaxiFare/assets/120791252/3605f49b-0365-4b5d-b721-398361d49123)
+
 ## Installation
 
 ### 1. Run In Cmd
