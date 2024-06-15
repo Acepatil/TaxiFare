@@ -60,10 +60,10 @@ traindf.drop(traindf[traindf['dropoff_longitude'] < -180].index, inplace=True)
 from math import *
 
 def haversine(a):
-    lon1=a[0]
-    lat1=a[1]
-    lon2=a[2]
-    lat2=a[3]
+    lon1=a.iloc[0]
+    lat1=a.iloc[1]
+    lon2=a.iloc[2]
+    lat2=a.iloc[3]
     """
     Calculate the great circle distance between two points 
     on the earth (specified in decimal degrees)
@@ -105,5 +105,5 @@ model = RandomForestRegressor(n_estimators=250, criterion='friedman_mse')
 
 model.fit(X_train, y_train)
 
-# pickle.dump(model, open('model.pkl','wb'))
-# model=pickle.load(open('model.pkl','rb'))
+pickle.dump(model, open('model.pkl','wb'))
+model=pickle.load(open('model.pkl','rb'))
