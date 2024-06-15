@@ -105,5 +105,5 @@ model = RandomForestRegressor(n_estimators=250, criterion='friedman_mse')
 
 model.fit(X_train, y_train)
 
-pickle.dump(model, open('model.pkl','wb'))
-model=pickle.load(open('model.pkl','rb'))
+# pickle.dump(model, open('model.pkl','wb'))
+# model=pickle.load(open('model.pkl','rb'))
